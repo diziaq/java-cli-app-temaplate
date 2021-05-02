@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>playground.template</groupId>
+  <artifactId>java-cli-app-template</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <result.jar.name>template-app</result.jar.name>
+    <result.main.class.name>playground.head.CliApp</result.main.class.name>
+
+    <version.java>11</version.java>
+    <version.junit>5.7.1</version.junit>
+    <version.hamcrest>2.2</version.hamcrest>
+    <version.picocli>4.6.1</version.picocli>
+
+    <version.plugin.maven.compiler>3.8.1</version.plugin.maven.compiler>
+    <version.plugin.maven.jar>3.2.0</version.plugin.maven.jar>
+    <version.plugin.maven.resources>3.1.0</version.plugin.maven.resources>
+    <version.plugin.maven.surefire>3.0.0-M5</version.plugin.maven.surefire>
+    <version.plugin.maven.failsafe>${version.plugin.maven.surefire}</version.plugin.maven.failsafe>
+    <version.plugin.maven.assembly>3.3.0</version.plugin.maven.assembly>
+
+    <encoding.source.code>UTF-8</encoding.source.code>
+    <encoding.resources>UTF-8</encoding.resources>
+
+    <manifest.build.time>${maven.build.timestamp}</manifest.build.time>
+    <manifest.build.number>none</manifest.build.number>
+    <manifest.built.by>auto/${user.name}</manifest.built.by>
+
+    <option.tests.skip>false</option.tests.skip>
+
+    <project.build.sourceEncoding>${encoding.source.code}</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
+      <version>${version.picocli}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <version>${version.hamcrest}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.plugin.maven.compiler}</version>
+        <configuration>
+          <encoding>${encoding.source.code}</encoding>
+          <release>${version.java}</release>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${version.plugin.maven.jar}</version>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Build-Number>${manifest.build.number}</Build-Number>
+              <Build-Time>${manifest.build.time}</Build-Time>
+              <Built-By>${manifest.built.by}</Built-By>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${version.plugin.maven.surefire}</version>
+        <configuration>
+          <skipTests>${option.tests.skip}</skipTests>
+          <disableXmlReport>true</disableXmlReport>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <failIfNoTests>true</failIfNoTests>
+          <skipAfterFailureCount>1</skipAfterFailureCount>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${version.plugin.maven.failsafe}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${version.plugin.maven.resources}</version>
+        <configuration>
+          <encoding>${encoding.resources}</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${version.plugin.maven.assembly}</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>${result.main.class.name}</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <appendAssemblyId>false</appendAssemblyId><!-- it is ok to have a build warning about this line -->
+          <finalName>${result.jar.name}</finalName>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
